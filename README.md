@@ -34,7 +34,15 @@ $ npm install
 
 ## Running the app
 
+Ensure that your .env is created, use .env.example as example
+
 ```bash
+# migrations
+$ npx prisma migrate delpoy
+
+#docker
+$ docker compose up -d
+
 # development
 $ npm run start
 
