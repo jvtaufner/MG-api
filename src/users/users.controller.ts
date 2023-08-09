@@ -24,7 +24,7 @@ export class UsersController {
   @Get()
   findAll(
     @Query()
-    query: {
+    query?: {
       skip?: number;
       take?: number;
       cursor?: Prisma.UserWhereUniqueInput;
