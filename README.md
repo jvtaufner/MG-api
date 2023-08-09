@@ -37,11 +37,14 @@ $ npm install
 Ensure that your .env is created, use .env.example as example
 
 ```bash
-# migrations
-$ npx prisma migrate delpoy
-
 #docker
 $ docker compose up -d
+
+# migrations
+$ npm run db:migrate
+
+# seed
+$ npm run db:seed
 
 # development
 $ npm run start
