@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../db';
 import { CreateUserDto } from './dtos';
 import { Prisma, User } from '@prisma/client';
@@ -8,24 +12,44 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({
-      data: dto,
-    });
+    let user: User;
+
+    try {
+      user = await this.prisma.user.create({
+        data: dto,
+      });
+    } catch (err) {
+      throw new ForbiddenException('Email já existe');
+    }
+
+    return user;
   }
 
   async findAll(params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
+    email?: string;
+    name?: string;
     orderBy?: Prisma.UserOrderByWithRelationInput;
   }): Promise<User[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { skip, take, email, name, orderBy } = params;
+
+    const where: Prisma.UserWhereInput = {
+      email,
+      name,
+    };
+
+    if (email === '') {
+      delete where.email;
+    }
+
+    if (name === '') {
+      delete where.name;
+    }
 
     return this.prisma.user.findMany({
       skip,
       take,
-      cursor,
       where,
       orderBy,
     });

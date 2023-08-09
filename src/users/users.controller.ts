@@ -8,9 +8,9 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dtos';
 import { Prisma } from '@prisma/client';
+import { CreateUserDto, UpdateUserDto } from './dtos';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
@@ -27,8 +27,8 @@ export class UsersController {
     query?: {
       skip?: number;
       take?: number;
-      cursor?: Prisma.UserWhereUniqueInput;
-      where?: Prisma.UserWhereInput;
+      email?: string;
+      name?: string;
       orderBy?: Prisma.UserOrderByWithRelationInput;
     },
   ) {
