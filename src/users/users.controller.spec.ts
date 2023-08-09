@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import { PrismaService } from '../db';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -76,13 +75,13 @@ describe('UsersController Unit Testing', () => {
     jest
       .spyOn(usersService, 'findAll')
       .mockImplementation(
-        ({ where }) =>
+        ({ email }) =>
           new Promise((resolve) =>
-            resolve(mockUsers.filter((value) => where.id === value.id)),
+            resolve(mockUsers.filter((value) => value.email === email)),
           ),
       );
     expect(
-      await usersController.findAll({ where: { id: 'bbccdd' } }),
+      await usersController.findAll({ email: 'foo@email.com' }),
     ).toHaveLength(1);
   });
 
@@ -97,9 +96,7 @@ describe('UsersController Unit Testing', () => {
 
     jest
       .spyOn(usersService, 'update')
-      .mockImplementation(
-        ({ where, data }) => new Promise((resolve) => resolve(mockUser)),
-      );
+      .mockImplementation(() => new Promise((resolve) => resolve(mockUser)));
 
     expect(await usersController.update('aabbcc', mockUser)).toStrictEqual(
       mockUser,
@@ -117,9 +114,7 @@ describe('UsersController Unit Testing', () => {
 
     jest
       .spyOn(usersService, 'delete')
-      .mockImplementation(
-        ({ where }) => new Promise((resolve) => resolve(mockUser)),
-      );
+      .mockImplementation(() => new Promise((resolve) => resolve(mockUser)));
 
     expect(await usersController.delete('aabbcc')).toStrictEqual(mockUser);
   });
